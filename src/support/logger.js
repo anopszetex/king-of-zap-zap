@@ -6,6 +6,10 @@ const logger = pino(
     messageKey: 'message',
     sync: false,
     level: 'debug',
+    transport:
+      process.env.NODE_ENV === 'development'
+        ? { target: 'pino-pretty' }
+        : undefined,
     base: {
       instance: process.env.NODE_APP_INSTANCE,
       processName: process.env.name,
