@@ -1,0 +1,21 @@
+{
+  "name": "@anopszetex/king-of-zap-zap",
+  "version": "1.0.0",
+  "description": "A WhatsApp API client that connects through the WhatsApp Web browser app",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anopszetex/king-of-zap-zap.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anopszetex/king-of-zap-zap/issues"
+  },
+  "homepage": "https://github.com/anopszetex/king-of-zap-zap#readme"
+}
