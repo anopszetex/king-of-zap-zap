@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": ""
+    "start": "",
+    "lint": "NODE_ENV=production eslint src/ --fix",
+    "lint:ci": "eslint --ext .js .",
+    "format": "prettier . -w -u",
+    "format:check": "prettier . -c -u"
   },
   "repository": {
     "type": "git",
@@ -17,5 +21,15 @@
   "bugs": {
     "url": "https://github.com/anopszetex/king-of-zap-zap/issues"
   },
-  "homepage": "https://github.com/anopszetex/king-of-zap-zap#readme"
+  "homepage": "https://github.com/anopszetex/king-of-zap-zap#readme",
+  "devDependencies": {
+    "eslint": "^8.36.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-security-node": "^1.1.1",
+    "prettier": "^2.8.4"
+  }
 }
