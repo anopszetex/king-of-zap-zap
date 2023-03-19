@@ -4,20 +4,23 @@
   "description": "A WhatsApp API client that connects through the WhatsApp Web browser app",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": "^14.21.3 || ^16.19.1 || ^18.14.1 || ^19.6.1"
+  },
   "scripts": {
     "start": "",
     "lint": "NODE_ENV=production eslint src/ --fix",
     "lint:ci": "eslint --ext .js .",
     "format": "prettier . -w -u",
-    "format:check": "prettier . -c -u"
+    "format:check": "prettier . -c -u",
+    "nodeversion:check": "npx is-my-node-vulnerable"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anopszetex/king-of-zap-zap.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "anopszetex",
+  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/anopszetex/king-of-zap-zap/issues"
   },
