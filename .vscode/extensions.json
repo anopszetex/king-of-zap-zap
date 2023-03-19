@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "aaron-bond.better-comments",
+    "adpyke.codesnap",
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "wix.vscode-import-cost",
+    "rickynormandeau.mariana-pro",
+    "johnpapa.vscode-peacock",
+    "davidanson.vscode-markdownlint",
+    "christian-kohler.npm-intellisense",
+    "esbenp.prettier-vscode"
+  ]
+}
