@@ -1,21 +1,24 @@
-const http = require('http');
+/* const qrcode = require('qrcode-terminal');
 
-const PORT = 5000;
+const { Client } = require('whatsapp-web.js');
 
-async function handleRequest(request, response) {
-  response.setHeader('Content-Type', 'application/json');
+const client = new Client();
 
-  if (request.url) {
-    if (request.url === '/authenticate') {
-      response.end('Hello API!');
-    }
-  }
-
-  response.end();
-}
-
-const app = http.createServer(handleRequest);
-
-app.listen(PORT, function listeningListener() {
-  console.log('server running at:', `http://localhost:${PORT}`);
+client.on('qr', qr => {
+  qrcode.generate(qr, { small: true });
 });
+
+client.on('ready', () => {
+  console.log('Client is ready!');
+});
+
+client.on('message', message => {
+  console.log(message.body);
+});
+
+client.initialize();
+ */
+
+const { logger } = require('./support/logger.js');
+
+logger.info('Hello world!');
