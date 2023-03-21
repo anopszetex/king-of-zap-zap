@@ -1,6 +1,10 @@
-require('dotenv');
-/* const qrcode = require('qrcode-terminal');
+require('dotenv').config();
+const http = require('node:http');
+const { logger } = require('./support/logger.js');
 
+const PORT = process.env.PORT || 5000;
+
+/* const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
 
 const client = new Client();
@@ -20,6 +24,30 @@ client.on('message', message => {
 client.initialize();
  */
 
-const { logger } = require('./support/logger.js');
+const queue = new Map();
 
-logger.info('Hello world!');
+function handleRequest(request, response) {
+  response.setHeader('Content-Type', 'application/json');
+
+  if (request.url === 'authenticate') {
+    response.write('Authenticate has been successfully!');
+    return response.end();
+  }
+
+  if (request.url === '/send-message') {
+    for (let i = 0; i < 100; i++) {
+      queue.set(i, 'pong');
+    }
+
+    response.write('Message has been successfully sent!');
+    return response.end();
+  }
+
+  response.end();
+}
+
+const app = http.createServer(handleRequest);
+
+app.listen(PORT, function listeningListener() {
+  logger.info(`🚀 Server running at: http://localhost:${PORT}`);
+});
