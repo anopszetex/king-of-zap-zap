@@ -7,7 +7,7 @@
     "node": "^14.21.3 || ^16.19.1 || ^18.14.1 || ^19.6.1"
   },
   "scripts": {
-    "start": "",
+    "start": "npx nodemon src/index.js",
     "lint": "NODE_ENV=production eslint src/ --fix",
     "lint:ci": "eslint --ext .js .",
     "format": "prettier . -w -u",
