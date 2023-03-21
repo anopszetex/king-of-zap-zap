@@ -1,50 +1,43 @@
 require('dotenv').config();
 const http = require('node:http');
 const { logger } = require('./support/logger.js');
+const { EventEmitter } = require('node:events');
 
 const PORT = process.env.PORT || 5000;
 
-/* const qrcode = require('qrcode-terminal');
-const { Client } = require('whatsapp-web.js');
-
-const client = new Client();
-
-client.on('qr', qr => {
-  qrcode.generate(qr, { small: true });
-});
-
-client.on('ready', () => {
-  console.log('Client is ready!');
-});
-
-client.on('message', message => {
-  console.log(message.body);
-});
-
-client.initialize();
- */
-
 const queue = new Map();
 
+const eventEmitter = new EventEmitter();
+
 function handleRequest(request, response) {
+  const routeKey = request.url + ':' + request.method;
+
   response.setHeader('Content-Type', 'application/json');
 
-  if (request.url === 'authenticate') {
+  if (routeKey === '/authenticate:GET') {
     response.write('Authenticate has been successfully!');
     return response.end();
   }
 
-  if (request.url === '/send-message') {
+  if (routeKey === '/send-message:GET') {
     for (let i = 0; i < 100; i++) {
       queue.set(i, 'pong');
     }
 
     response.write('Message has been successfully sent!');
+
+    eventEmitter.emit('readyQueue');
+
     return response.end();
   }
 
+  response.write('Welcome to the King of Zap Zap!');
   response.end();
 }
+
+eventEmitter.on('readyQueue', function listeningReadyQueue() {
+  logger.info({ list: queue.size }, 'Queue is ready!');
+});
 
 const app = http.createServer(handleRequest);
 
