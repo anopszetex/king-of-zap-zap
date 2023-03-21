@@ -1,15 +1,14 @@
 const pino = require('pino');
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const logger = pino(
   {
     name: 'king-of-zap-zap',
     messageKey: 'message',
     sync: false,
-    level: 'debug',
-    transport:
-      process.env.NODE_ENV === 'development'
-        ? { target: 'pino-pretty' }
-        : undefined,
+    level: isDev ? 'debug' : 'info',
+    transport: isDev ? { target: 'pino-pretty' } : undefined,
     base: {
       instance: process.env.NODE_APP_INSTANCE,
       processName: process.env.name,
