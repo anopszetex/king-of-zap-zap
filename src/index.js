@@ -1,15 +1,17 @@
 require('dotenv').config();
-const http = require('node:http');
-const { logger } = require('./support/logger.js');
-const { EventEmitter } = require('node:events');
 
-const PORT = process.env.PORT || 5000;
+const closeWithGrace = require('close-with-grace');
+const http = require('node:http');
+
+const { logger } = require('./support');
+
+Error.stackTraceLimit = 0; //* 0 to turn off stack traces
+
+const PORT = process.env.PORT ?? 5000;
 
 const queue = new Map();
 
-const eventEmitter = new EventEmitter();
-
-function handleRequest(request, response) {
+async function handleRequest(request, response) {
   const routeKey = request.url + ':' + request.method;
 
   response.setHeader('Content-Type', 'application/json');
@@ -26,8 +28,6 @@ function handleRequest(request, response) {
 
     response.write('Message has been successfully sent!');
 
-    eventEmitter.emit('readyQueue');
-
     return response.end();
   }
 
@@ -35,12 +35,24 @@ function handleRequest(request, response) {
   response.end();
 }
 
-eventEmitter.on('readyQueue', function listeningReadyQueue() {
-  logger.info({ list: queue.size }, 'Queue is ready!');
-});
-
 const app = http.createServer(handleRequest);
 
 app.listen(PORT, function listeningListener() {
   logger.info(`🚀 Server running at: http://localhost:${PORT}`);
+});
+
+//* error handling
+app.on('error', function listeningError(err) {
+  if (err.code === 'EADDRINUSE') {
+    logger.error({ errorData: err }, 'Port: ' + PORT + ' is already in use');
+  }
+});
+
+//* graceful shutdown
+closeWithGrace({ delay: 500 }, function ({ signal }) {
+  logger.info({ signal }, 'Finalizing application');
+  queue.clear();
+  app.closeIdleConnections();
+  app.close();
+  logger.info('Application has been successfully close');
 });
