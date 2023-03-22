@@ -5,12 +5,13 @@ const {
   workerData,
 } = require('node:worker_threads');
 
+const { AppError, SUCESS_EXIT_CODE } = require('./support');
 const path = require('node:path');
 
-const SUCESS_EXIT_CODE = 0;
-
-class AppError extends Error {}
-
+/**
+ * @param {Map<number, string>} workerData
+ * @returns {Promise<void>}
+ */
 async function runQueue(workerData) {
   return new Promise((resolve, reject) => {
     const worker = new Worker(path.join(__dirname, 'worker.js'), {
@@ -22,7 +23,7 @@ async function runQueue(workerData) {
     worker.once('exit', code => {
       if (code !== SUCESS_EXIT_CODE) {
         reject(
-          new AppError(
+          AppError.build(
             'Thread: ' + worker.threadId + ' stopped with code: ' + code
           )
         );
