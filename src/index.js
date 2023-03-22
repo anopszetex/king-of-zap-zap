@@ -1,16 +1,14 @@
 require('dotenv').config();
-
 const closeWithGrace = require('close-with-grace');
 const http = require('node:http');
 
-const { handleRequest, onStop } = require('./routes');
+const { buildRequest, onStop } = require('./routes');
 const { logger } = require('./support');
 
+Error.stackTraceLimit = 0; //* 0 to turn off stack traces
 const PORT = process.env.PORT ?? 5000;
 
-Error.stackTraceLimit = 0; //* 0 to turn off stack traces
-
-const app = http.createServer(handleRequest);
+const app = http.createServer(buildRequest(logger));
 
 //* start server
 app.listen(PORT, function listeningListener() {
