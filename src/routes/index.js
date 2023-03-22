@@ -30,8 +30,8 @@ async function handleRequest(request, response) {
   response.end();
 }
 
-function onStop(fn) {
-  fn(queue);
+function onStop(callback) {
+  callback(queue);
 }
 
 module.exports = { handleRequest, onStop };
