@@ -7,14 +7,9 @@ const queue = new Map();
  * @returns {Promise<void>}
  */
 async function handleRequest(request, response) {
-  const routeKey = request.url + ':' + request.method;
-
   response.setHeader('Content-Type', 'application/json');
 
-  if (routeKey === '/authenticate:GET') {
-    response.write('Authenticate has been successfully!');
-    return response.end();
-  }
+  const routeKey = request.url + ':' + request.method;
 
   if (routeKey === '/send-message:GET') {
     for (let i = 0; i < 100; i++) {
@@ -23,6 +18,11 @@ async function handleRequest(request, response) {
 
     response.write('Message has been successfully sent!');
 
+    return response.end();
+  }
+
+  if (routeKey === '/authenticate:GET') {
+    response.write('Authenticate has been successfully!');
     return response.end();
   }
 
