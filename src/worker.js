@@ -1,5 +1,3 @@
-const path = require('node:path');
-
 const {
   Worker,
   isMainThread,
@@ -7,26 +5,36 @@ const {
   workerData,
 } = require('node:worker_threads');
 
-async function runQueue() {
+const path = require('node:path');
+
+const SUCESS_EXIT_CODE = 0;
+
+class AppError extends Error {}
+
+async function runQueue(workerData) {
   return new Promise((resolve, reject) => {
-    const worker = new Worker(path.join(__dirname, './worker.js'), {
+    const worker = new Worker(path.join(__dirname, 'worker.js'), {
       workerData,
     });
 
-    worker.on('message', resolve);
-    worker.on('error', reject);
-    worker.on('exit', code => {
-      if (code !== 0) {
-        reject(new Error('Worker stopped with exit code' + code));
+    worker.once('message', resolve);
+    worker.once('error', reject);
+    worker.once('exit', code => {
+      if (code !== SUCESS_EXIT_CODE) {
+        reject(
+          new AppError(
+            'Thread: ' + worker.threadId + ' stopped with code: ' + code
+          )
+        );
       }
     });
   });
 }
 
 if (!isMainThread) {
-  const result = runQueue();
+  console.log('my structure::', workerData.queue);
 
-  parentPort.postMessage(result);
+  parentPort.postMessage('asasas');
 }
 
 module.exports = { runQueue };
