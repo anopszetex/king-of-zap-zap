@@ -1,12 +1,3 @@
-class AppError extends Error {
-  constructor(message, context) {
-    super(message);
-    this.context = context;
-  }
-
-  static build(message, context) {
-    return new AppError(message, context);
-  }
-}
+const { AppError } = require('./class');
 
 module.exports = { AppError };
