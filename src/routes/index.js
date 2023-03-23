@@ -1,12 +1,14 @@
-const { runQueue } = require('./../worker');
+const { EventEmitter } = require('node:events');
+const { runQueue } = require('../worker');
 
 const queue = new Map();
 
+const event = new EventEmitter();
+
 /**
- * @param {import('whatsapp-web.js').Client} client
  * @param {import('pino').Logger} logger
  */
-function buildRequest(client, logger) {
+function buildRequest(logger) {
   /**
    * @param {import('http').IncomingMessage} request
    * @param {import('http').ServerResponse} response
@@ -18,13 +20,17 @@ function buildRequest(client, logger) {
     const routeKey = request.url + ':' + request.method;
 
     if (routeKey === '/send-message:GET') {
-      const workerData = { queue };
-
-      const result = await runQueue(logger, workerData);
-
-      logger.info({ result }, 'result');
+      queue.set(1, 'minha-mensagem-texto');
 
       response.write('Message has been successfully sent!');
+
+      return response.end();
+    }
+
+    if (routeKey === '/process-queue:GET') {
+      event.emit('run-queue', logger);
+
+      response.write('Authenticate has been successfully!');
 
       return response.end();
     }
@@ -42,5 +48,11 @@ function buildRequest(client, logger) {
 function onStop(callback) {
   callback(queue);
 }
+
+event.on('run-queue', async logger => {
+  const result = await runQueue(logger, queue);
+
+  logger.info({ result }, 'Queue has been successfully processed!');
+});
 
 module.exports = { buildRequest, onStop };
