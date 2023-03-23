@@ -3,9 +3,10 @@ const { runQueue } = require('./../worker');
 const queue = new Map();
 
 /**
+ * @param {import('whatsapp-web.js').Client} client
  * @param {import('pino').Logger} logger
  */
-function buildRequest(logger) {
+function buildRequest(client, logger) {
   /**
    * @param {import('http').IncomingMessage} request
    * @param {import('http').ServerResponse} response
@@ -17,11 +18,9 @@ function buildRequest(logger) {
     const routeKey = request.url + ':' + request.method;
 
     if (routeKey === '/send-message:GET') {
-      for (let i = 0; i < 100; i++) {
-        queue.set(i, 'pong');
-      }
+      const workerData = { queue };
 
-      const result = await runQueue(queue);
+      const result = await runQueue(logger, workerData);
 
       logger.info({ result }, 'result');
 
