@@ -1,4 +1,5 @@
 const { EventEmitter } = require('node:events');
+const { randomUUID } = require('node:crypto');
 const { runQueue } = require('./../queue');
 
 const queue = new Map();
@@ -20,9 +21,9 @@ function buildRequest(logger) {
     const routeKey = request.url + ':' + request.method;
 
     if (routeKey === '/send-message:GET') {
-      queue.set(1, 'minha-mensagem-texto');
+      queue.set(randomUUID(), 'minha-mensagem-texto');
 
-      response.write('Message has been successfully sent!');
+      response.write('add message to queue');
 
       return response.end();
     }
@@ -51,6 +52,8 @@ function onStop(callback) {
 
 event.on('run-queue', async logger => {
   const result = await runQueue(logger, queue);
+
+  queue.clear();
 
   logger.info({ result }, 'Queue has been successfully processed!');
 });

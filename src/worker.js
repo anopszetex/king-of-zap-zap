@@ -1,6 +1,6 @@
 const { parentPort } = require('node:worker_threads');
 
-async function processQueue() {
+async function processQueue(jobs) {
   return new Promise((resolve, reject) => {
     setTimeout(
       () =>
