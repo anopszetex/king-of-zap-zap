@@ -1,14 +1,15 @@
-const { parentPort } = require('worker_threads');
+const { parentPort } = require('node:worker_threads');
 
 async function processQueue() {
-  const wait = new Promise((resolve, reject) => {
-    // eslint-disable-next-line promise/catch-or-return
-    setTimeout(7000).then(() => resolve);
+  return new Promise((resolve, reject) => {
+    setTimeout(
+      () =>
+        resolve(
+          parentPort.postMessage('process has been successfully completed!')
+        ),
+      5000
+    );
   });
-
-  await wait();
-
-  parentPort.postMessage('process has been successfully completed!');
 }
 
-parentPort.once('message', processQueue);
+parentPort.on('message', processQueue);

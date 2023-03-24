@@ -16,6 +16,8 @@ async function runQueue(logger, workerData) {
 
     logger.debug('Thread: ' + worker.threadId + ' has been started!');
 
+    worker.postMessage(1);
+
     worker.once('message', resolve);
     worker.once('error', reject);
     worker.once('exit', code => {

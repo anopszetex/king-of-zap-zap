@@ -1,5 +1,5 @@
 const { EventEmitter } = require('node:events');
-const { runQueue } = require('../worker');
+const { runQueue } = require('./../queue');
 
 const queue = new Map();
 
