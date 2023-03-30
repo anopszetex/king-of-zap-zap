@@ -1,10 +1,8 @@
-const { EventEmitter } = require('node:events');
 const { randomUUID } = require('node:crypto');
 const { runQueue } = require('./../queue');
 
 const queue = new Map();
-
-const event = new EventEmitter();
+const MAX_JOBS = 50;
 
 /**
  * @param {import('pino').Logger} logger
@@ -20,24 +18,27 @@ function buildRequest(logger) {
 
     const routeKey = request.url + ':' + request.method;
 
-    if (routeKey === '/send-message:GET') {
-      queue.set(randomUUID(), 'minha-mensagem-texto');
-
-      response.write('add message to queue');
-
-      return response.end();
-    }
-
     if (routeKey === '/process-queue:GET') {
-      event.emit('run-queue', logger);
+      if (queue.size !== MAX_JOBS) {
+        queue.set(randomUUID(), '1test@test.com');
+        queue.set(randomUUID(), '2test@test.com');
+        queue.set(randomUUID(), '3test@test.com');
+        queue.set(randomUUID(), '4test@test.com');
+        queue.set(randomUUID(), '5test@test.com');
 
-      response.write('Authenticate has been successfully!');
+        const jobId = await runQueue(logger, queue);
 
-      return response.end();
-    }
+        logger.debug('JobId: ' + jobId + ' has been processed!');
 
-    if (routeKey === '/authenticate:GET') {
-      response.write('Authenticate has been successfully!');
+        queue.delete(jobId);
+
+        response.write('Queue has been successfully processed!');
+
+        return response.end();
+      }
+
+      queue.clear();
+      response.write('Queue is full!');
       return response.end();
     }
 
@@ -49,13 +50,5 @@ function buildRequest(logger) {
 function onStop(callback) {
   callback(queue);
 }
-
-event.on('run-queue', async logger => {
-  const result = await runQueue(logger, queue);
-
-  queue.clear();
-
-  logger.info({ result }, 'Queue has been successfully processed!');
-});
 
 module.exports = { buildRequest, onStop };
