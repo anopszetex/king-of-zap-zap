@@ -8,7 +8,7 @@ const sleep = new Function(...functionArgs, functionBody);
 async function processQueue(jobs) {
   await sleep();
 
-  parentPort.postMessage(jobs.keys().next().value); //* row = [ '852c3f22', 'test@test.com' ]
+  parentPort.postMessage(jobs.keys().next().value); //* send the job id to the main thread
 }
 
 parentPort.on('message', processQueue);
