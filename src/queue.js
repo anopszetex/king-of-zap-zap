@@ -16,7 +16,7 @@ async function runQueue(logger, jobs) {
 
     worker.postMessage(jobs);
 
-    worker.on('message', resolve);
+    worker.once('message', resolve);
     worker.once('error', reject);
     worker.once('exit', code => {
       if (code !== SUCESS_EXIT_CODE) {

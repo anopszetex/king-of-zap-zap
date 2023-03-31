@@ -8,7 +8,7 @@ const { logger } = require('./support');
 Error.stackTraceLimit = 0; //* 0 to turn off stack traces
 const PORT = process.env.PORT ?? 5000;
 
-const app = http.createServer(buildRequest(logger));
+const app = http.createServer(buildRequest());
 
 //* start server
 app.listen(PORT, function listeningListener() {
