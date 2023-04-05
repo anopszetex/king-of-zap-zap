@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/anopszetex/king-of-zap-zap#readme",
   "devDependencies": {
+    "autocannon": "^7.10.0",
     "eslint": "^8.36.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.7.0",
