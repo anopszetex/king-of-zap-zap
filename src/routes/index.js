@@ -4,54 +4,63 @@ const { logger: log } = require('./../support/logger/service');
 const { runQueue } = require('./../queue');
 
 const queue = new Map();
-const MAX_JOBS = 50;
 
-function buildRequest() {
-  /**
-   * @param {import('http').IncomingMessage} request
-   * @param {import('http').ServerResponse} response
-   * @returns {Promise<void>}
-   */
-  return async function handleRequest(request, response) {
-    response.setHeader('Content-Type', 'application/json');
+const MAX_JOBS = 1000;
 
-    const routeKey = request.url + ':' + request.method;
+/**
+ * @param {import('http').IncomingMessage} request
+ * @param {import('http').ServerResponse} response
+ * @returns {Promise<void>}
+ */
+function handleRequest(request, response) {
+  response.setHeader('Content-Type', 'application/json');
 
-    if (routeKey === '/process-queue:GET') {
-      queue.set(randomUUID(), 'test@test.com');
+  const routeKey = request.url + ':' + request.method;
 
-      // eslint-disable-next-line promise/catch-or-return
-      runQueue(log, queue).then(response => {
-        log.debug('Jobs ids: ' + response);
-        return;
-      });
+  if (routeKey === '/process-queue:GET') {
+    if (queue.size !== MAX_JOBS) {
+      queue.set(randomUUID(), 'demo@demo.com');
 
       response.write('Queue has been successfully processed!');
-
       return response.end();
     }
 
-    response.write('Welcome to the King of Zap Zap!');
-    response.end();
-  };
+    response.write('Queue is full!');
+    return response.end();
+  }
+
+  response.write('Welcome to the King of Zap Zap!');
+  response.end();
 }
 
 function onStop(callback) {
   callback(queue);
 }
 
-/* setInterval(() => {
-  if (queue.size !== MAX_JOBS) {
-    // eslint-disable-next-line promise/catch-or-return
-    runQueue(log, queue).then(response => {
-      log.debug('Jobs ids: ' + response);
-      return;
-    });
+function roundRoubin(array, index = 0) {
+  return function () {
+    if (index >= array.length) {
+      index = 0;
+    }
 
+    return array[index++];
+  };
+}
+
+const threads = roundRoubin([runQueue, runQueue, runQueue, runQueue, runQueue]);
+
+setInterval(() => {
+  if (queue.size === 0) {
     return;
   }
 
-  queue.clear();
-}, 10000).unref(); */
+  // eslint-disable-next-line promise/catch-or-return
+  threads()(log, queue).then(response => {
+    log.debug(response);
+    return;
+  });
 
-module.exports = { buildRequest, onStop };
+  queue.clear();
+}, 10000).unref();
+
+module.exports = { handleRequest, onStop };
