@@ -12,7 +12,9 @@
     "lint:ci": "eslint --ext .js .",
     "format": "prettier . -w -u",
     "format:check": "prettier . -c -u",
-    "nodeversion:check": "npx is-my-node-vulnerable"
+    "nodeversion:check": "npx is-my-node-vulnerable",
+    "clinic:doctor": "npx clinic doctor -- node src/index.js",
+    "autocannon": "npx autocannon -c 100 -d 5 -p 10 http://localhost:3000/process-queue"
   },
   "repository": {
     "type": "git",
