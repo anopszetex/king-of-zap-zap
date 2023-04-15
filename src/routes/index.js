@@ -47,7 +47,7 @@ function roundRoubin(array, index = 0) {
   };
 }
 
-const threads = roundRoubin([runQueue, runQueue, runQueue, runQueue, runQueue]);
+const threads = roundRoubin([runQueue, runQueue, runQueue]);
 
 setInterval(() => {
   if (queue.size === 0) {
