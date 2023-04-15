@@ -1,6 +1,6 @@
 const { parentPort, threadId } = require('node:worker_threads');
 
-const functionArgs = ['value=5000'];
+const functionArgs = ['value=500'];
 const functionBody = `return new Promise(resolve => setTimeout(resolve, value))`;
 
 const sleep = new Function(...functionArgs, functionBody);
