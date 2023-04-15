@@ -14,7 +14,8 @@ npm start
 
 ## To start monitoring the memory usage
 
-```bash
-# in .env file, set NODE_ENV to production before running this command, otherwise it will not work because pino-pretty
+```sh
+# WARNING: in .env file, set NODE_ENV to production before running this command, 
+# otherwise it will not work because pino-pretty
 npm run climem:server
 ```
