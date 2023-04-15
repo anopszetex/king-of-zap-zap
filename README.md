@@ -16,6 +16,6 @@ npm start
 
 ```sh
 # WARNING: in .env file, set NODE_ENV to production before running this command, 
-# otherwise it will not work because pino-pretty
+# otherwise it will not work because pino-pretty "the transport crash because of a bug  However the error is not reported correctly on the main thread due to a race condition."
 npm run climem:server
 ```
