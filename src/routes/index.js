@@ -5,7 +5,7 @@ const { runQueue } = require('./../queue');
 
 const queue = new Map();
 
-const MAX_JOBS = 1000;
+const MAX_JOBS = 500;
 
 /**
  * @param {import('http').IncomingMessage} request
@@ -61,6 +61,6 @@ setInterval(() => {
   });
 
   queue.clear();
-}, 10000).unref();
+}, 5000).unref();
 
 module.exports = { handleRequest, onStop };
