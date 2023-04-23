@@ -54,11 +54,13 @@ setInterval(() => {
     return;
   }
 
+  // ! comment the code below if you want to monitoring the memory leak or clinic.js
   // eslint-disable-next-line promise/catch-or-return
   threads()(log, queue).then(response => {
     log.debug(response);
     return;
   });
+  // ! end
 
   queue.clear();
 }, 5000).unref();
