@@ -1,29 +1,10 @@
-const { Client, LegacySessionAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
 const path = require('node:path');
-const fs = require('node:fs');
-
-const SESSION_FILE_PATH = path.join(__dirname, 'session.json');
-
-const options = { session: null };
-
-if (fs.existsSync(SESSION_FILE_PATH)) {
-  options.session = require(SESSION_FILE_PATH);
-}
 
 const client = new Client({
-  authStrategy: new LegacySessionAuth(options),
-});
-
-client.on('authenticated', session => {
-  options.session = session;
-
-  fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), err => {
-    if (err) {
-      console.error(err);
-    }
-  });
+  authStrategy: new LocalAuth({ dataPath: path.join(__dirname, '../../data') }),
 });
 
 function factory() {
@@ -31,7 +12,7 @@ function factory() {
     init() {
       return client.initialize();
     },
-    qrcodeGen() {
+    generateQrCode() {
       client.on('qr', qr => {
         qrcode.generate(qr, { small: true });
       });
@@ -43,8 +24,8 @@ function factory() {
         client.on('disconnected', reject);
       });
     },
-    async send(value = 'pong', number = '') {
-      client.sendMessage(number, value);
+    send(value = 'pong', number = '555599012342@c.us') {
+      return client.sendMessage(number, value);
     },
   };
 }
