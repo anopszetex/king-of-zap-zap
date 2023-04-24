@@ -18,7 +18,6 @@ curl localhost:3000/process-queue
 # in another terminal
 npm run autocannon
 
-
 # if you want to authenticate and test whatsapp API
 curl localhost:3000/authenticating
 ```
