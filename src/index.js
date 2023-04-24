@@ -23,17 +23,20 @@ app.on('error', function listeningError(err) {
 });
 
 //* graceful shutdown
-closeWithGrace({ delay: 500 }, function listeningCloseWithGrace({ signal }) {
-  logger.debug({ signal }, 'Finalizing application');
+closeWithGrace(
+  { delay: 500 },
+  function listeningCloseWithGrace({ err, signal }) {
+    logger.error({ signal, err }, 'Finalizing application');
 
-  onStop(function listeningOnStop(queue) {
-    logger.debug({ size: queue.size }, 'Queue size');
-    queue.clear();
-    logger.debug({ queue }, 'Queue has been successfully cleared');
-  });
+    onStop(function listeningOnStop(queue) {
+      logger.debug({ size: queue.size }, 'Queue size');
+      queue.clear();
+      logger.debug({ queue }, 'Queue has been successfully cleared');
+    });
 
-  app.closeIdleConnections();
-  app.close();
+    app.closeIdleConnections();
+    app.close();
 
-  logger.debug('Application has been successfully close');
-});
+    logger.debug('Application has been successfully close');
+  }
+);
