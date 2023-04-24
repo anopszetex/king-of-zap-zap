@@ -131,6 +131,7 @@ file-system/*
 !file-system/.gitkeep
 scripts/bkp
 scripts/files
+data/*
 
 # yarn
 .pnp.*
