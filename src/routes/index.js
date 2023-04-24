@@ -1,11 +1,14 @@
+/* eslint-disable promise/always-return */
 const { randomUUID } = require('node:crypto');
 
 const { logger: log } = require('./../support/logger/service');
+const { factory } = require('./../infra/whatsapp-web');
 const { runQueue } = require('./../queue');
 
-const queue = new Map();
+const MAX_JOBS = 250;
 
-const MAX_JOBS = 500;
+const queue = new Map();
+const client = factory();
 
 /**
  * @param {import('http').IncomingMessage} request
@@ -29,6 +32,25 @@ function handleRequest(request, response) {
     return response.end();
   }
 
+  if (routeKey === '/authenticating:GET') {
+    client.generateQrCode();
+    client.init();
+
+    return client
+      .ready()
+      .then(() => {
+        log.info('Client is ready');
+        response.write('is authenticated');
+        return response.end();
+      })
+      .catch(err => {
+        log.error(err);
+        response.writeHead(500);
+        response.write('Something went wrong!');
+        return response.end();
+      });
+  }
+
   response.write('Welcome to the King of Zap Zap!');
   response.end();
 }
@@ -47,7 +69,7 @@ function roundRoubin(array, index = 0) {
   };
 }
 
-const threads = roundRoubin([runQueue, runQueue, runQueue]);
+const threads = roundRoubin([runQueue, runQueue]);
 
 setInterval(() => {
   if (queue.size === 0) {
@@ -63,6 +85,6 @@ setInterval(() => {
   // ! end
 
   queue.clear();
-}, 5000).unref();
+}, 7000).unref();
 
 module.exports = { handleRequest, onStop };
