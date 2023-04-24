@@ -10,6 +10,16 @@ npm install
 
 ```bash
 npm start
+
+
+# to simulate a queue list, run the following command
+curl localhost:3000/process-queue
+
+# in another terminal, run the following command
+npm run autocannon
+
+# to authenticate and test whatsapp API, run the following command
+curl localhost:3000/authenticating
 ```
 
 ## To start monitoring the memory usage
