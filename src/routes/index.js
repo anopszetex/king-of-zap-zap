@@ -3,7 +3,7 @@ const { randomUUID } = require('node:crypto');
 
 const { logger: log } = require('./../support/logger/service');
 const { factory } = require('./../infra/whatsapp-web');
-const { runQueue } = require('./../queue');
+// const { runQueue } = require('./../queue');
 
 const MAX_JOBS = 250;
 
@@ -59,7 +59,7 @@ function onStop(callback) {
   callback(queue);
 }
 
-function roundRoubin(array, index = 0) {
+/* function roundRoubin(array, index = 0) {
   return function () {
     if (index >= array.length) {
       index = 0;
@@ -67,9 +67,9 @@ function roundRoubin(array, index = 0) {
 
     return array[index++];
   };
-}
+} */
 
-const threads = roundRoubin([runQueue, runQueue]);
+// const threads = roundRoubin([runQueue, runQueue]);
 
 setInterval(() => {
   if (queue.size === 0) {
@@ -78,10 +78,10 @@ setInterval(() => {
 
   // ! comment the code below if you want to monitoring the memory leak or clinic.js
   // eslint-disable-next-line promise/catch-or-return
-  threads()(log, queue).then(response => {
-    log.debug(response);
-    return;
-  });
+  // threads()(log, queue).then(response => {
+  // log.debug(response);
+  // return;
+  // });
   // ! end
 
   queue.clear();
