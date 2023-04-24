@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/anopszetex/king-of-zap-zap#readme",
   "devDependencies": {
-    "0x": "^3.3.0-rc3",
+    "0x": "^3.4.2",
     "autocannon": "^7.10.0",
     "climem": "^1.0.3",
     "clinic": "^12.1.0",
