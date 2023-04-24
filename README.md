@@ -9,23 +9,21 @@ npm install
 ## To start the API server
 
 ```bash
+# start the server
 npm start
 
-
-# to simulate a queue list, run the following command
+# to simulate a queue list
 curl localhost:3000/process-queue
 
-# in another terminal, run the following command
+# in another terminal
 npm run autocannon
 
-# to authenticate and test whatsapp API, run the following command
+
+# if you want to authenticate and test whatsapp API
 curl localhost:3000/authenticating
 ```
 
 ## To start monitoring the memory usage
-
-
-To run the monitoring, you must have comment this code: [link](https://github.com/anopszetex/king-of-zap-zap/blob/main/src/routes/index.js#L59-L60)
 
 ```sh
 # WARNING: in .env file, set NODE_ENV to production before running this command, 
