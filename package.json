@@ -16,7 +16,8 @@
     "clinic:doctor": "npx clinic doctor -- node src/index.js",
     "autocannon": "npx autocannon -c 100 -d 30 -p 10 http://localhost:3000/process-queue",
     "climem:server": "CLIMEM=8999 node -r climem src/index.js",
-    "climem": "npx climem 8999"
+    "climem": "npx climem 8999",
+    "flamegraph": "npx 0x -o src/index.js"
   },
   "repository": {
     "type": "git",
