@@ -38,7 +38,5 @@ npm run climem:server
 npm run climem
 
 # to initialize autocannon, run the following command
-npm run :autocannon
-
-# to stop the monitoring, press Ctrl + C
+npm run autocannon
 ```
