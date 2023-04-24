@@ -24,8 +24,10 @@ function factory() {
         client.on('disconnected', reject);
       });
     },
-    send(value = 'pong', number = '555599012342@c.us') {
-      return client.sendMessage(number, value);
+    send(value = 'pong', number = '555599012342') {
+      const numberWithSuffix = number + '@c.us';
+
+      return client.sendMessage(numberWithSuffix, value);
     },
   };
 }
